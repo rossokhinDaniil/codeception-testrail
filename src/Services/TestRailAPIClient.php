@@ -65,6 +65,22 @@ class TestRailAPIClient
 
         return $response;
     }
+    
+     /**
+     * Get test cases belonging to the run
+     *
+     * @param string $runID
+     * @return array
+     */
+    public function getRunCase(string $runID): array
+    {
+        $runID = str_replace('R', '', $runID);
+
+        /** @var string $response */
+        $response = $this->get('get_tests/' . $runID);
+        
+        return json_decode($response);
+    }
 
     /**
      * @param string $slug
