@@ -37,7 +37,7 @@ class TestRailAPIClient
         $this->pwd = $pwd;
     }
 
-    /**
+     /**
      * Sends the provided status along with the comment as
      * a new test result for the provided test case
      * in the defined test run in TestRail.
@@ -46,9 +46,8 @@ class TestRailAPIClient
      * @param string $caseID
      * @param int $statusID
      * @param string $comment
-     * @return string
      */
-    public function sendTestRunResult(string $runID, string $caseID, int $statusID, string $comment): string
+    public function sendTestRunResult(string $runID, string $caseID, int $statusID, string $comment)
     {
         # replace any characters in the IDs.
         # IDs are digits only, however identification includes a character.
@@ -57,13 +56,13 @@ class TestRailAPIClient
 
         $jsonParams = array(
             'status_id' => $statusID,
-            'comment' => $comment,
+            'comment' => explode("\n", $comment)[0],
         );
 
         /** @var string $response */
         $response = $this->post('add_result_for_case/' . $runID . '/' . $caseID, json_encode($jsonParams));
 
-        return $response;
+        return json_decode($response);
     }
     
      /**
