@@ -153,7 +153,7 @@ class TestRailExtension extends Extension
             $comment
         );
 
-        if (strpos($response, 'error') !== false) {
+        if (property_exists($response, 'error') !== false) {
 
             if ($this->continueOnError) {
                 echo '** Error when sending result to TestRail: ' . $response . PHP_EOL;
