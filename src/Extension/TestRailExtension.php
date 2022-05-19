@@ -25,6 +25,7 @@ class TestRailExtension extends Extension
     private const STATUS_NOT_TESTED = 3;
     private const STATUS_RETEST = 4;
     private const STATUS_FAILED = 5;
+    private const STATUS_SKIPPED = 6;
 
 
     /** @var TestRailAPIClient */
@@ -43,6 +44,7 @@ class TestRailExtension extends Extension
     public static $events = array(
         Events::TEST_FAIL => 'testFailed',
         Events::TEST_SUCCESS => 'testSuccess',
+        Events::TEST_SKIPPED => 'testSkipped',
     );
 
 
@@ -138,6 +140,29 @@ class TestRailExtension extends Extension
         }
     }
 
+    /**
+     * @param TestEvent $e
+     * @throws \Exception
+     */
+    public function testSkipped(TestEvent $e)
+    {
+        /** @var array $testCase */
+        $testCase = $e->getTest()->getMetadata()->getParam(self::ANNOTATION_CASE);
+
+        if ($testCase !== null && count($testCase) > 0) {
+
+            /** @var string $testCase */
+            $testCase = $testCase[0];
+
+            /** @var string $comment */
+            $comment = $e->getFail()->getMessage();
+
+            echo PHP_EOL;
+            echo ">> sending TestRail SKIPPED for Test " . $testCase . PHP_EOL;
+            $this->sendResult($testCase, self::STATUS_SKIPPED, $comment);
+        }
+    }    
+    
     /**
      * @param string $caseID
      * @param int $statusID
