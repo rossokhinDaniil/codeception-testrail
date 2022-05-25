@@ -43,6 +43,7 @@ class TestRailExtension extends Extension
      */
     public static $events = array(
         Events::TEST_FAIL => 'testFailed',
+        Events::TEST_ERROR => 'testFailed',
         Events::TEST_SUCCESS => 'testSuccess',
         Events::TEST_SKIPPED => 'testSkipped',
     );
